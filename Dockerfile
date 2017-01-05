@@ -10,9 +10,13 @@ RUN apt-get update && apt-get install -y zip \
         libpng12-dev \
         git \
         libxslt-dev \
-    && docker-php-ext-install -j$(nproc) iconv mcrypt zip soap pdo_mysql bcmath \
-    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
-    && docker-php-ext-install -j$(nproc) gd
+        wget \
+        sqlite3 \
+        libsqlite3-dev
+
+RUN docker-php-ext-install -j$(nproc) iconv mcrypt zip soap pdo_mysql bcmath pdo_sqlite
+RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/
+RUN docker-php-ext-install -j$(nproc) gd
 
 # Install xDebug
 RUN cd /tmp && wget http://xdebug.org/files/xdebug-2.5.0.tgz && tar -xvzf xdebug-2.5.0.tgz \
