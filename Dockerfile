@@ -26,3 +26,13 @@ RUN wget https://pecl.php.net/get/ssh2-1.0.tgz \
 
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
+
+RUN cd /tmp && wget https://phar.phpunit.de/phpunit.phar \
+    && mv phpunit.phar /usr/bin/phpunit \
+    && chmod a+x /usr/bin/phpunit
+
+VOLUME ["/app"]
+WORKDIR /app
+
+ENTRYPOINT ["/usr/bin/phpunit"]
+CMD ["--help"]
