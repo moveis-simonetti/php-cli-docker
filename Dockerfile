@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -y zip \
         libsqlite3-dev \
         libssl-dev
 
-RUN pear config-set http_proxy $http_proxy
+RUN [ "" != "$http_proxy" ] && pear config-set http_proxy $http_proxy
 
 # Install SSH2
 RuN cd /tmp && wget https://www.libssh2.org/download/libssh2-1.8.0.tar.gz \
