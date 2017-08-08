@@ -23,7 +23,20 @@ RUN cd /tmp && wget http://xdebug.org/files/xdebug-2.5.0.tgz && tar -xvzf xdebug
     && cd xdebug-2.5.0 && phpize && ./configure && make && make install \
     && cp modules/xdebug.so /usr/local/lib/php/extensions/no-debug-non-zts-20160303 \
     && echo "zend_extension = /usr/local/lib/php/extensions/no-debug-non-zts-20160303/xdebug.so" > /usr/local/etc/php/conf.d/xdebug.ini \
-&& echo "xdebug.var_display_max_depth=15" >> /usr/local/etc/php/conf.d/xdebug.ini
+    && echo "xdebug.var_display_max_depth=15" >> /usr/local/etc/php/conf.d/xdebug.ini
+
+RUN echo "Install Redis" \
+    && pecl install "redis-3.1.1" && docker-php-ext-enable redis
+
+RUN echo "Install ssh2" \
+    && apt-get install -y libssh2-1-dev libssh2-1 \
+    && wget https://www.libssh2.org/download/libssh2-1.7.0.tar.gz && wget http://pecl.php.net/get/ssh2-1.0.tgz \
+    && tar vxzf libssh2-1.7.0.tar.gz && tar vxzf ssh2-1.0.tgz \
+    && cd libssh2-1.7.0 && ./configure \
+    && make && make install \
+    && cd ../ssh2-1.0 && phpize && ./configure --with-ssh2 \
+    && make && make install \
+    && echo "extension=ssh2.so" >> /usr/local/etc/php/conf.d/ssh2.ini
 
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
